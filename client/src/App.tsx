@@ -1,18 +1,45 @@
-// App.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import SearchBar from './SearchBar';
+import LandingPage from './LandingPage';
 import CardList from './CardList';
 
 const App = () => {
   const [searchResults, setSearchResults] = useState([]);
+  const [searchedTerm, setSearchedTerm] = useState('');
+  const [hasSearched, setHasSearched] = useState(false); // State to track whether the user has searched
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const itemsPerPage = 12; // Number of cards per page
 
   const fetchCards = async (q) => {
     try {
       const response = await axios.get(`http://localhost:3001/cards/search?q=${encodeURIComponent(q)}`);
-      setSearchResults(response.data);
+      setSearchResults(response.data.data);
+      
+      // Update the searched term
+      setSearchedTerm(q);
+      
+      // Total items
+      setTotalItems(response.data.total_cards || 0);
+      
+      // Reset to page 1 after each search
+      setCurrentPage(1);
+
+      // Set hasSearched to true when the user performs a search
+      setHasSearched(true);
     } catch (error) {
-      console.error('Error fetching cards:', error.message);
+      // If there's an error, set an empty array for search results
+      setSearchResults([]);
+
+      // Still set the searched term to maintain consistency
+      setSearchedTerm(q);
+
+      // Set total items to 0 since there are no results
+      setTotalItems(0);
+
+      // Set hasSearched to true to indicate that the user has performed a search
+      setHasSearched(true);
     }
   };
 
@@ -29,10 +56,30 @@ const App = () => {
 
   const debouncedFetchCards = debounce(fetchCards, 1000);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div>
-      <SearchBar onSearch={debouncedFetchCards} />
-      <CardList cards={searchResults} />
+      {hasSearched ? (
+        <div className="p-2">
+          <SearchBar 
+            onSearch={debouncedFetchCards} 
+            searchTerm={searchedTerm}
+          />
+          <CardList
+            cards={searchResults}
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+            searchTerm={searchedTerm}
+          />
+        </div>
+      ) : (
+        <LandingPage onSearch={debouncedFetchCards} />
+      )}
     </div>
   );
 };
