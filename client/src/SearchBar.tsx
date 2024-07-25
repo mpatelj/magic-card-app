@@ -1,21 +1,23 @@
+// SearchBar.tsx
 import React, { useState, useEffect } from 'react';
+import { SearchBarProps } from './interfaces';
 
-const SearchBar = ({ onSearch, searchTerm }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, searchTerm }) => {
   const [searchTermInput, setSearchTermInput] = useState('');
 
   useEffect(() => {
     // Use an empty string if searchTerm is undefined
-    setSearchTermInput(searchTerm || ''); 
+    setSearchTermInput(searchTerm || '');
   }, [searchTerm]);
 
   // Function to handle changes in the input field
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
     setSearchTermInput(input);
   };
 
   // Function to handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSearch(searchTermInput);
   };

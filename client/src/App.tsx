@@ -1,28 +1,30 @@
+// App.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import SearchBar from './SearchBar';
 import LandingPage from './LandingPage';
 import CardList from './CardList';
+import { AppState, Card } from './interfaces';
 
-const App = () => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [searchedTerm, setSearchedTerm] = useState('');
-  const [hasSearched, setHasSearched] = useState(false); // State to track whether the user has searched
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
-  const itemsPerPage = 12; // Number of cards per page
+const App: React.FC = () => {
+  const [searchResults, setSearchResults] = useState<AppState['searchResults']>([]);
+  const [searchedTerm, setSearchedTerm] = useState<AppState['searchedTerm']>('');
+  const [hasSearched, setHasSearched] = useState<AppState['hasSearched']>(false); // State to track whether the user has searched
+  const [currentPage, setCurrentPage] = useState<AppState['currentPage']>(1);
+  const [totalItems, setTotalItems] = useState<AppState['totalItems']>(0);
+  const itemsPerPage: AppState['itemsPerPage'] = 12; // Number of cards per page
 
-  const fetchCards = async (q) => {
+  const fetchCards = async (q: string) => {
     try {
       const response = await axios.get(`http://localhost:3001/cards/search?q=${encodeURIComponent(q)}`);
       setSearchResults(response.data.data);
-      
+
       // Update the searched term
       setSearchedTerm(q);
-      
+
       // Total items
       setTotalItems(response.data.total_cards || 0);
-      
+
       // Reset to page 1 after each search
       setCurrentPage(1);
 
@@ -44,9 +46,9 @@ const App = () => {
   };
 
   // Debounce function to limit API requests
-  const debounce = (func, delay) => {
-    let timer;
-    return function (...args) {
+  const debounce = (func: (...args: any[]) => void, delay: number) => {
+    let timer: NodeJS.Timeout;
+    return function (...args: any[]) {
       clearTimeout(timer);
       timer = setTimeout(() => {
         func.apply(this, args);
@@ -56,7 +58,7 @@ const App = () => {
 
   const debouncedFetchCards = debounce(fetchCards, 1000);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 

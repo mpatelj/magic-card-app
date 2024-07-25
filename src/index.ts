@@ -1,11 +1,17 @@
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import cors from 'cors';
-require('dotenv').config();
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const port = 3001;
 const SCRYFALL_API_URL = process.env.SCRYFALL_API_URL;
+
+if (!SCRYFALL_API_URL) {
+  throw new Error('SCRYFALL_API_URL is not defined in the environment variables.');
+}
 
 // Using the cors middleware to enable Cross-Origin Resource Sharing
 app.use(cors());
@@ -21,8 +27,8 @@ app.get('/cards/search', async (req: Request, res: Response) => {
     
     // Return the data from the external API to the client
     res.json(response.data);
-  } catch (error) {
-    console.error('Error fetching cards:', error.message);
+  } catch (error: any) {
+    console.error('Error fetching cards:', error);
 
     // Return an error response if something went wrong
     res.status(500).json({ error: 'Internal server error' });
