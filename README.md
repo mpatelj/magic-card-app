@@ -4,7 +4,7 @@
 
 This project is a full-stack application built with TypeScript, React, Node, and Express. The application allows users to search for Magic: The Gathering cards using the Scryfall API. Users can input a card name in the search bar, and the application will display relevant card details including images, names, set names, numbers, and rarities.
 
-## Features
+## Technologies
 
 - **Backend**: 
   - Node and Express server with a single REST endpoint to fetch card data from the Scryfall API.
