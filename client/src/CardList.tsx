@@ -1,8 +1,10 @@
+// CardList.tsx
 import React, { useState } from 'react';
+import { Card, CardListProps } from './interfaces';
 
-const CardList = ({ cards, currentPage, itemsPerPage, totalItems, onPageChange, searchTerm }) => {
-  const [sortField, setSortField] = useState(null);
-  const [sortOrder, setSortOrder] = useState('asc');
+const CardList: React.FC<CardListProps> = ({ cards, currentPage, itemsPerPage, totalItems, onPageChange, searchTerm }) => {
+  const [sortField, setSortField] = useState<keyof Card | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -19,11 +21,11 @@ const CardList = ({ cards, currentPage, itemsPerPage, totalItems, onPageChange, 
     );
   }
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number) => {
     onPageChange(newPage);
   };
 
-  const handleSortChange = (field) => {
+  const handleSortChange = (field: keyof Card) => {
     if (sortField === field) {
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
@@ -37,13 +39,15 @@ const CardList = ({ cards, currentPage, itemsPerPage, totalItems, onPageChange, 
       return cards;
     }
     return cards.slice().sort((a, b) => {
-      let fieldA = a[sortField];
-      let fieldB = b[sortField];
+      let fieldA = a[sortField as keyof Card];
+      let fieldB = b[sortField as keyof Card];
 
       // Convert field values to numbers if possible, to sort field containing integers correctly
-      if (!isNaN(fieldA) && !isNaN(fieldB)) {
-        fieldA = parseInt(fieldA);
-        fieldB = parseInt(fieldB);
+      if (typeof fieldA === 'string' && !isNaN(parseInt(fieldA))) {
+        fieldA = parseInt(fieldA) as any;
+      }
+      if (typeof fieldB === 'string' && !isNaN(parseInt(fieldB))) {
+        fieldB = parseInt(fieldB) as any;
       }
 
       if (fieldA < fieldB) {

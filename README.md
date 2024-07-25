@@ -1,93 +1,65 @@
-# Introduction
+# Magic Card Search Application
 
-Hello 👋,
+## Project Overview
 
-Thanks for taking the time to complete this brief take-home assignment. Feel free to take as long as you need up to the deadline provided.
+This project is a full-stack application built with TypeScript, React, Node, and Express. The application allows users to search for Magic: The Gathering cards using the Scryfall API. Users can input a card name in the search bar, and the application will display relevant card details including images, names, set names, numbers, and rarities.
 
-The goal of this exercise is to evaluate your skills in developing a basic full-stack application in TypeScript (React, Node, Express, 3rd-party integration). Feel free to make any assumptions, simplifications, or other changes to the problems - though please state those in your write up when you submit this assignment. Please use as many libraries as is reasonable - there is no sense in rebuilding what has been built. Feel at liberty to structure the project in a way that satisfies you.
+## Features
 
-Before getting started, please read this document carefully.
+- **Backend**: 
+  - Node and Express server with a single REST endpoint to fetch card data from the Scryfall API.
+  - Uses environment variables to manage sensitive data like the API URL.
 
-**Good luck 🙃**
+- **Frontend**:
+  - React application with a search bar to input card names.
+  - Displays search results dynamically without needing to click a button.
+  - Prevents multiple API requests per second using debouncing.
+  - Pagination and sorting features for better user experience.
 
-# Directions
+## Getting Started
 
-📓 Document all design decisions in `DESIGN_EXPLANATION.md`
+### Prerequisites
 
-**Backend**: Using Node and Express, you will create a single **REST** endpoint to retrieve a list of Magic cards from the Scryfall API based on a provided search string from the client.
+- Node.js (latest LTS version recommended)
+- npm (comes with Node.js)
 
-- Read the Scryfall API url from a .env file.
+### Installation
 
-**Frontend**: Using React, you will use the included _vite_ skeleton (located at `/client`) to build:
+1. Clone the repository:
 
-1. A search bar for the user to input a card name to search. Using the input string, make a call to your Node endpoint to lookup cards. The search should work <ins>without</ins> the user needing to click a button. And it should be impossible for a user to submit more than 1 API request per second using this search bar.
+    ```bash
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
 
-2. Display the card results to the user in the most user friendly way you can come up with. Feel free to be creative. All cards must display the following: The card's image(s), name, set name, number, and rarity.
+2. Install server dependencies:
 
-# What counts?
+    ```bash
+    npm install
+    ```
 
-- All functional requirements must be satisfied
-- Clean, minimal, Production level code
-- General TypeScript/ES6 knowledge
-- **Bonus**: Node endpoint tested using a framework of your choice
-- **Bonus**: Frontend pagination/sorting
-- **Bonus**: Design aesthetically pleasing and responsive in the browser
-- **Bonus**: Entire interface is styled using [Tailwindcss](https://tailwindcss.com) exclusively
+3. Install client dependencies:
 
-# Submission
+    ```bash
+    cd ./client
+    npm install
+    ```
 
-Once you're satisfied with what you've built. Invite _fated-x_ to your repo and email your recruiter to inform the dev team.
+### Running the Project
 
-# Getting started
+1. Start both the Node and React servers from the project root:
 
-With the latest Node LTS installed, run the following commands:
+    ```bash
+    npm start
+    ```
 
-```bash
-npm install
-cd ./client
-npm install
-```
+2. The application should now be running with:
+   - A Node server on port **3001**
+   - A React development server on port **3000**
 
-To start the Node/React servers, from the project root just run:
+### Environment Variables
 
-```bash
-npm start
-```
+Ensure you have a `.env` file in the root of the project with the following variable:
 
-You should now have:
-
-- A Node server running on port **3001**,
-- A create-react-app server running on port **3000**
-
-## What will you find inside this boilerplate
-
-In this boilerplate, you will find:
-
-- The main entry file: `src/index.ts`
-- A `DESIGN_EXPLANATION.md` file to document your comments and design decisions
-- A `client` directory containing a clean bootstrapped copy of **vite**
-- Inside the Node `package.json`, we added the following packages:
-
-  - `express` to include our backend Node.js web application framework.
-  - `@swc/core` to transpile our TypeScript (makes it an order of magnitude faster than vanilla transpileOnly)
-  - `@tsconfig/node20` to have the latest base tsconfig options for Node v20.
-  - `@tsconfig/node20` to have the strictest base tsconfig options.
-  - `@types/express` for Express typings
-  - `@typescript-eslint/eslint-plugin` to provide TypeScript lint rules
-  - `@typescript-eslint/parser` to allow for ESLint to lint TypeScript source code
-  - `concurrently` to allow us to run 2 npm scripts at the same time from **npm start**
-  - `eslint` to enforce coding best practices
-  - `eslint-config-airbnb-base` to enforce Airbnb's ESLint rules
-  - `eslint-config-airbnb-typescript` to enforce Airbnb's ESLint rules with TypeScript support
-  - `eslint-config-prettier` to turn off all rules conflicting with Prettier
-  - `ts-node` to run TypeScript directly
-  - `ts-node-dev` to auto-restart the Node server every time a change is made
-  - `typescript` to allow us to write TypeScript code
-
-# Scryfall API
-
-### GET /cards/search
-
-https://scryfall.com/docs/api/cards/search
-
-Returns a List object containing Cards found using a fulltext search string.
+```plaintext
+SCRYFALL_API_URL=<your-scryfall-api-url>
