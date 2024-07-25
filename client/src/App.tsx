@@ -4,7 +4,7 @@ import axios from 'axios';
 import SearchBar from './SearchBar';
 import LandingPage from './LandingPage';
 import CardList from './CardList';
-import { AppState, Card } from './interfaces';
+import { AppState } from './interfaces';
 
 const App: React.FC = () => {
   const [searchResults, setSearchResults] = useState<AppState['searchResults']>([]);
@@ -48,13 +48,13 @@ const App: React.FC = () => {
   // Debounce function to limit API requests
   const debounce = (func: (...args: any[]) => void, delay: number) => {
     let timer: NodeJS.Timeout;
-    return function (...args: any[]) {
+    return (...args: any[]) => {
       clearTimeout(timer);
       timer = setTimeout(() => {
-        func.apply(this, args);
+        func(...args);
       }, delay);
     };
-  };
+  };  
 
   const debouncedFetchCards = debounce(fetchCards, 1000);
 
