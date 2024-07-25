@@ -39,17 +39,21 @@ const CardList: React.FC<CardListProps> = ({ cards, currentPage, itemsPerPage, t
       return cards;
     }
     return cards.slice().sort((a, b) => {
-      let fieldA = a[sortField as keyof Card];
-      let fieldB = b[sortField as keyof Card];
-
-      // Convert field values to numbers if possible, to sort field containing integers correctly
-      if (typeof fieldA === 'string' && !isNaN(parseInt(fieldA))) {
-        fieldA = parseInt(fieldA) as any;
-      }
-      if (typeof fieldB === 'string' && !isNaN(parseInt(fieldB))) {
-        fieldB = parseInt(fieldB) as any;
-      }
-
+      let fieldA = a[sortField];
+      let fieldB = b[sortField];
+  
+      // Ensure fieldA and fieldB are strings if they are not numbers
+      const toComparableString = (value: any): string => {
+        if (typeof value === 'string') return value;
+        if (typeof value === 'number') return value.toString();
+        if (value && typeof value === 'object' && 'normal' in value) return (value as { normal: string }).normal;
+        return '';
+      };
+  
+      fieldA = toComparableString(fieldA);
+      fieldB = toComparableString(fieldB);
+  
+      // Now that they are both strings, we can compare
       if (fieldA < fieldB) {
         return sortOrder === 'asc' ? -1 : 1;
       }
@@ -58,7 +62,7 @@ const CardList: React.FC<CardListProps> = ({ cards, currentPage, itemsPerPage, t
       }
       return 0;
     });
-  };
+  }; 
 
   // Calculate the range of displayed cards, to show counter near search results yield
   const rangeStart = startIndex + 1;
