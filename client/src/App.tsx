@@ -48,13 +48,13 @@ const App: React.FC = () => {
   // Debounce function to limit API requests
   const debounce = (func: (...args: any[]) => void, delay: number) => {
     let timer: NodeJS.Timeout;
-    return (...args: any[]) => {
+    return function (this: any, ...args: any[]) { // Explicitly define 'this' type
       clearTimeout(timer);
       timer = setTimeout(() => {
-        func(...args);
+        func.apply(this, args);
       }, delay);
     };
-  };  
+  };
 
   const debouncedFetchCards = debounce(fetchCards, 1000);
 
